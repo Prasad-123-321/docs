@@ -1,0 +1,106 @@
+---
+title: "useEffect Hook"
+description: "useEffect is a React Hook that lets you synchronize a component with an external system."
+icon: "code"
+---
+
+```jsx
+useEffect(setup, [dependencies]);
+```
+
+### Side Effects
+
+As we build applications, we often need to synchronize with external systems. This can include things like:
+
+- Making network requests
+- Managing timeouts / intervals
+- Reading/writing from localStorage
+- Listening for global events
+
+React calls all of these things “side effects”. If you’re **not connecting** to any external system, **you probably don’t need an Effect**.
+
+### Connecting to the external systems
+
+Some components need to stay connected to the network, some browser API, or a third-party library, while they are displayed on the page. These systems aren’t controlled by React, so they are called external.
+
+To connect your component to some external system, call `useEffect` at the top level of your component:
+
+```jsx
+import { useEffect } from "react";
+import { createConnection } from "./chat.js";
+
+function ChatRoom({ roomId }) {
+  const [serverUrl, setServerUrl] = useState("https://localhost:1234");
+
+  useEffect(() => {
+    const connection = createConnection(serverUrl, roomId);
+    connection.connect();
+    return () => {
+      connection.disconnect();
+    };
+  }, [serverUrl, roomId]);
+  // ...
+}
+```
+
+You need to pass two arguments to `useEffect` :
+
+1. A **setup function** with setup code that connects to that system.
+   - It should return a cleanup function with cleanup code that disconnects from that system.
+2. A (Optional) **list of dependencies** including every value from your component used inside of those functions.
+
+### Caveats
+
+- `useEffect` returns `undefined`
+- Effects only run on the client. They don’t run during server rendering.
+
+### Example : Fetching Data with Effects
+
+```jsx
+import { useEffect, useState } from "react";
+
+export default function Home() {
+  const [products, setProducts] = useState(null);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    let ignore = false;
+    async function fetchProducts() {
+      setLoading(true);
+      const res = await fetch("https://dummyjson.com/products");
+      const data = res.json();
+      setLoading(false);
+      if (!ignore) {
+        setProducts(data.products);
+      }
+    }
+    fetchProducts();
+
+    return () => {
+      ignore = false;
+    };
+  }, []);
+
+  return (
+    <div>
+      {loading ? (
+        <p>Loading ...</p>
+      ) : (
+        <div>
+          {products?.map((product, index) => (
+            <div key={product.id}>
+              <p>{product.title}</p>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+```
+
+Note the `ignore` variable which is initialized to `false`, and is set to `true` during cleanup. This ensures your code doesn’t suffer from **“race conditions”**, network responses may arrive in a different order than you sent them.
+
+### What is Race condition ?
+
+You would typically notice a race condition (in React) when two slightly different requests for data have been made, and the application displays a different result depending on which request completes first.
