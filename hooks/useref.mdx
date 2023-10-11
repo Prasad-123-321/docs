@@ -1,0 +1,144 @@
+---
+title: "useRef Hook"
+description: "useRef is a React Hook that lets you reference a value that’s not needed for rendering."
+icon: "code"
+---
+
+```jsx
+const ref = useRef(initialValue);
+```
+
+### Reference
+
+Call `useRef` at the top level of your component to declare a ref.
+
+```jsx
+import { useRef } from "react";
+
+function MyComponent() {
+  const intervalRef = useRef(0);
+  const inputRef = useRef(null);
+  // ...
+}
+```
+
+### Parameters
+
+- `initialValue`: The value you want the ref object’s current property to be initially. It can be a value of any type. This argument is ignored after the initial render.
+
+### Returns
+
+`useRef` returns an object with single property
+
+- `currnet` : Initially, it’s set to the initialValue you have passed. You can later set it to something else. If you pass the ref object to React as a ref attribute to a JSX node, React will set its current property.
+- On the next renders, useRef will return the same object.
+
+### Caveats
+
+- You can mutate the `ref.current` property. Unlike state, it is **mutable**. However, if it holds an object that is used for rendering (for example, a piece of your state), then you shouldn’t mutate that object.
+- When you change the `ref.current` property, React does not re-render your component. React is not aware of when you change it because a ref is a plain JavaScript object.
+
+### Examples
+
+#### Click Counter
+
+```jsx
+import { useRef } from "react";
+
+export default function Home() {
+  const ref = useRef(0);
+
+  const handleClick = () => {
+    ref.current = ref.current + 1;
+    alert(`You clicked button ${ref.current} times`);
+  };
+
+  return (
+    <div>
+      <button onClick={handleClick}>Click Me</button>
+    </div>
+  );
+}
+```
+
+#### StopWatch
+
+```jsx
+import { useRef, useState } from "react";
+
+export default function Home() {
+  const [startTime, setStartTime] = useState(null);
+  const [now, setNow] = useState(null);
+  const intervalRef = useRef(null);
+
+  function handleStart() {
+    setStartTime(Date.now());
+    setNow(Date.now());
+
+    clearInterval(intervalRef.current);
+    intervalRef.current = setInterval(() => {
+      setNow(Date.now());
+    }, 10);
+  }
+
+  function handleStop() {
+    clearInterval(intervalRef.current);
+  }
+
+  let secondsPassed = 0;
+  if (startTime != null && now != null) {
+    secondsPassed = (now - startTime) / 1000;
+  }
+
+  return (
+    <div>
+      <h1>Seconds Passed : {secondsPassed.toFixed(3)}</h1>
+      <button onClick={handleStart}>Start</button>
+      <button onClick={handleStop}>Stop</button>
+    </div>
+  );
+}
+```
+
+### usePrevious Custom Hook
+
+<CodeGroup>
+
+```jsx App.jsx
+import { useState } from "react";
+import { usePrevious } from "./usePrevious";
+
+export default function Home() {
+  const [count, setCount] = useState(0);
+  const prevValue = usePrevious(count);
+
+  function handleClick() {
+    setCount((prevCount) => prevCount + 1);
+  }
+
+  return (
+    <div>
+      <h1>Current Count : {count}</h1>
+      <h1>Previous Count : {prevValue} </h1>
+      <button onClick={handleClick}>Increment Count</button>
+    </div>
+  );
+}
+```
+
+```jsx usePrevious.jsx
+import {useRef, useEffect} from 'react'
+
+export const usePrevious(initialValue) {
+  const ref = useRef(initialValue)
+
+  useEffect(() => {
+    ref.current = initialValue
+  }, [initialValue])
+
+  return ref.current
+}
+
+```
+
+</CodeGroup>
