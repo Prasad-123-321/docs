@@ -41,7 +41,9 @@
         "hooks/usecallback",
         "hooks/usememo",
         "hooks/uselayout",
-        "hooks/usereducer"
+        "hooks/usereducer",
+        "hooks/usecontext",
+        "hooks/usetransition"
       ]
     },
     {
