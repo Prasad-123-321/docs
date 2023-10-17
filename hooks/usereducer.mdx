@@ -1,0 +1,115 @@
+---
+title: "useReducer Hook"
+description: "`useReducer` is a React Hook that lets you add a **reducer** to your component."
+icon: "code"
+---
+
+```jsx
+const [state, dispatch] = useReducer(reducer, initialArgs, init);
+```
+
+### What is `reducer` ?
+
+Components with many state updates spread across many event handlers can get overwhelming. For these cases, you can consolidate all the state update logic outside your component in a single function, called a `reducer`.
+
+### Reference
+
+Call `useReducer` at the top level of your component to manage its state with a `reducer`.
+
+```jsx
+import { useReducer } from "react";
+
+function reducer(state, action) {
+  // ...
+}
+
+function MyComponent() {
+  const [state, dispatch] = useReducer(reducer, { age: 42 });
+  // ...
+}
+```
+
+### Parameters
+
+- `reducer` : The reducer function that specifies how the state gets updated. It must be pure, should take the **state** and **action** as arguments, and should return the next state. State and action can be of any types.
+
+- `initialArgs` : The value from which the initial state is calculated.
+
+- **optional** `init` : The initializer function that should return the initial state. If it’s not specified, the initial state is set to `initialArg`. Otherwise, the initial state is set to the result of calling `init(initialArg)`.
+
+### Returns
+
+`useReducer` returns an array with exact two values
+
+1. The **current state**. During the first render, it’s set to init(initialArg) or initialArg (if there’s no init).
+2. The **dispatch** function that lets you update the state to a different value and trigger a re-render.
+
+### `dispatch` function :
+
+The `dispatch` function returned by useReducer lets you update the state to a different value and trigger a re-render. You need to pass the **action** as the only argument to the dispatch function:
+
+```jsx
+const [state, dispatch] = useReducer(reducer, { age: 42 });
+
+function handleClick() {
+  dispatch({ type: "incremented_age" });
+  // ...
+}
+```
+
+React will set the next state to the result of calling the `reducer` function you’ve provided with the current `state` and the action you’ve passed to `dispatch`.
+
+### Parameters (dispatch)
+
+- `action` : The action performed by the user. It can be a value of any type. By convention, an action is usually an object with a `type` property identifying it and, optionally, other properties with additional information
+
+### Examples
+
+```jsx
+import { useReducer } from "react";
+
+function reducer(state, action) {
+  switch (action.type) {
+    case "incremented_age": {
+      return {
+        name: state.name,
+        age: state.age + 1,
+      };
+    }
+    case "changed_name": {
+      return {
+        name: action.nextName,
+        age: state.age,
+      };
+    }
+  }
+  throw Error("Unknown action: " + action.type);
+}
+
+const initialState = { name: "Taylor", age: 42 };
+
+export default function Form() {
+  const [state, dispatch] = useReducer(reducer, initialState);
+
+  function handleButtonClick() {
+    dispatch({ type: "incremented_age" });
+  }
+
+  function handleInputChange(e) {
+    dispatch({
+      type: "changed_name",
+      nextName: e.target.value,
+    });
+  }
+
+  return (
+    <>
+      <input value={state.name} onChange={handleInputChange} />
+      <button onClick={handleButtonClick}>Increment age</button>
+      <p>
+        Hello, {state.name}. You are {state.age}.
+      </p>
+    </>
+  );
+}
+```

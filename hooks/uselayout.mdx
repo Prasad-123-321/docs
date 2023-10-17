@@ -1,0 +1,78 @@
+---
+title: "useLayoutEffect Hook"
+description: "`useLayoutEffect` is a version of `useEffect` that fires before the browser repaints the screen."
+icon: "code"
+---
+
+```jsx
+useLayoutEffect(setup, dependencies);
+```
+
+### Reference
+
+Call `useLayoutEffect` to perform the layout measurements before the browser repaints the screen:
+
+```jsx
+import { useState, useRef, useLayoutEffect } from "react";
+
+function Tooltip() {
+  const ref = useRef(null);
+  const [tooltipHeight, setTooltipHeight] = useState(0);
+
+  useLayoutEffect(() => {
+    const { height } = ref.current.getBoundingClientRect();
+    setTooltipHeight(height);
+  }, []);
+  // ...
+}
+```
+
+### Parameters
+
+- `setup` : The function with your Effect’s logic. Before your component is added to the DOM, React will run your setup function. After every re-render with changed dependencies, React will first run the cleanup function (if you provided it) with the old values, and then run your setup function with the new values. Before your component is removed from the DOM, React will run your cleanup function.
+
+- **optional** `dependencies` : The list of all reactive values referenced inside of the `setup` code.
+
+> `useLayoutEffect` retruns `undefined`
+
+### Caveats
+
+- `useLayoutEffect` is a hook so you can call it at top of your component or your own hooks. You can't call inside loops or conditions.
+
+### Examples
+
+```jsx
+import { useLayoutEffect, useRef, useState } from "react";
+
+export default function Home() {
+  const [show, setShow] = useState(false);
+  const popup = useRef(null);
+  const button = useRef(null);
+
+  useLayoutEffect(() => {
+    if (button.current === null || popup.current === null) return;
+    const { bottom } = button.current.getBoundingClientRect();
+    popup.current.style.top = `${bottom + 45}px`;
+  }, [show]);
+
+  return (
+    <div className="m-10">
+      <button
+        ref={button}
+        onClick={() => setShow((prevShow) => !prevShow)}
+        className="px-4 py-2 rounded-md bg-black text-white"
+      >
+        Toggle PopUp
+      </button>
+      {show && (
+        <div
+          ref={popup}
+          className="absolute h-[200px] w-[300px] bg-gray-200 rounded-md text-white"
+        >
+          <h1 className="font-bold text-blue-600">This is a popup</h1>
+        </div>
+      )}
+    </div>
+  );
+}
+```

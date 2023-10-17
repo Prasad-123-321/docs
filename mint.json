@@ -40,8 +40,8 @@
         "hooks/useref",
         "hooks/usecallback",
         "hooks/usememo",
-        "hooks/settings",
-        "hooks/navigation"
+        "hooks/uselayout",
+        "hooks/usereducer"
       ]
     },
     {
