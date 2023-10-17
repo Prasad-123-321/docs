@@ -1,0 +1,72 @@
+---
+title: "useMemo Hook"
+description: "useMemo is a React Hook that lets you cache the result of a calculation between re-renders."
+icon: "code"
+---
+
+```jsx
+const cachedValue = useMemo(calculateValue, dependencies);
+```
+
+### Reference
+
+Call `useMemo` at the top level of your component to cache a calculation between re-renders:
+
+```jsx
+import { useMemo } from "react";
+
+function TodoList({ todos, tab }) {
+  const visibleTodos = useMemo(() => filterTodos(todos, tab), [todos, tab]);
+  // ...
+}
+```
+
+### Parameters
+
+- `calculateValue` : The function calculating the value that you want to store. It should be pure, should take no arguments.
+  React will call your function during the initial render. On next renders, React will return the same value again if the `dependencies` have not changed since the last render. Otherwise, it will call `calculateValue`, return its result, and store it so it can be reused later.
+- `dependencies` : The list of all reactive values referenced inside of the `calculateValue` code.
+
+### Returns
+
+On the initial render, `useMemo` returns the result of calling `calculateValue` with no arguments.
+
+During next renders, it will either return an already stored value from the last render (if the dependencies haven’t changed), or call `calculateValue` again, and return the result that `calculateValue` has returned.
+
+### Examples
+
+### `useMemo for expensive calculations`
+
+```jsx
+import { CounterTwo } from "@/components/CounterTwo";
+import { useCallback, useMemo, useState } from "react";
+
+export default function Home() {
+  const [count1, setCount1] = useState(0);
+  const [count2, setCount2] = useState(0);
+
+  function incrementCount1() {
+    setCount1((prevCount1) => prevCount1 + 1);
+  }
+
+  const incrementCount2 = useCallback(() => {
+    setCount2((prevCount2) => prevCount2 + 1);
+  }, [count2]);
+
+  // Expensive Calculation wrapped in useMemo to return momoized value
+  const isEven = useMemo(() => {
+    let i = 0;
+    while (i < 500000000) i++;
+    return count1 % 2 === 0;
+  }, [count1]);
+
+  return (
+    <div>
+      <p>Count One : {count1}</p>
+      <p>Count One is {isEven ? "Even" : "Odd"}</p>
+      <button onClick={incrementCount1}>Increment Count 1</button>
+      <CounterTwo count2={count2} setCount2={incrementCount2} />
+    </div>
+  );
+}
+```

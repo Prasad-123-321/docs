@@ -38,6 +38,8 @@
         "hooks/usestate",
         "hooks/useeffect",
         "hooks/useref",
+        "hooks/usecallback",
+        "hooks/usememo",
         "hooks/settings",
         "hooks/navigation"
       ]
