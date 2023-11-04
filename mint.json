@@ -25,30 +25,35 @@
     {
       "name": "JavaScript",
       "url": "api-reference"
+    },
+    {
+      "name": "DSA",
+      "url": "dsa"
     }
   ],
   "navigation": [
     {
       "group": "Basics",
-      "pages": ["introduction"]
+      "pages": ["react/basics/why-react", "react/basics/virtual-dom"]
     },
     {
       "group": "Built-in Hooks",
       "pages": [
-        "hooks/usestate",
-        "hooks/useeffect",
-        "hooks/useref",
-        "hooks/usecallback",
-        "hooks/usememo",
-        "hooks/uselayout",
-        "hooks/usereducer",
-        "hooks/usecontext",
-        "hooks/usetransition"
+        "react/hooks/usestate",
+        "react/hooks/useeffect",
+        "react/hooks/useref",
+        "react/hooks/usecallback",
+        "react/hooks/usememo",
+        "react/hooks/uselayout",
+        "react/hooks/usereducer",
+        "react/hooks/usecontext",
+        "react/hooks/usetransition",
+        "react/hooks/usesyncexternalstore"
       ]
     },
     {
       "group": "Basics",
-      "pages": ["api-reference/authentication"]
+      "pages": ["dsa/basics/big-o"]
     },
     {
       "group": "Endpoint Examples",

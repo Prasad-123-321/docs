@@ -1,0 +1,105 @@
+---
+title: "useTransition Hook"
+description: "`useTransition` is a React Hook that lets you update the state without blocking the UI."
+icon: "code"
+---
+
+```jsx
+const [isPending, startTransition] = useTransition();
+```
+
+### Reference
+
+Call `useTransition` at the top level of your component to mark some state updates as transitions.
+
+```jsx
+import { useTransition } from "react";
+
+function TabContainer() {
+  const [isPending, startTransition] = useTransition();
+  // ...
+}
+```
+
+<Tip>`useTransition` does not take any parameters</Tip>
+
+### Returns
+
+`useTransition` returns an array with exactly two items:
+
+1. The `isPending` flag that tells you whether there is a pending transition.
+2. The `startTransition` function that lets you mark a state update as a transition.
+
+### `startTransition` function :
+
+The `startTransition` function returned by useTransition lets you mark a state update as a `transition`.
+
+```jsx
+function TabContainer() {
+  const [isPending, startTransition] = useTransition();
+  const [tab, setTab] = useState("about");
+
+  function selectTab(nextTab) {
+    startTransition(() => {
+      setTab(nextTab);
+    });
+  }
+  // ...
+}
+```
+
+### Parameters (startTransition)
+
+- `scope` : A function that updates some state by calling one or more `set` functions. React immediately calls scope with no parameters and marks all state updates scheduled `synchronously` during the scope function call as transitions. They will be **non-blocking** and will not display unwanted loading indicators.
+
+### Caveats
+
+- `useTransition` is a Hook, so it can only be called inside components or custom Hooks.
+- If there are two level priority tasks to be done then whichever is the lowest priority task should wrap inside startTransition function.
+- You can wrap an update into a transition only if you have access to the `set` function of that state. If you want to start a transition in response to some prop or a custom Hook value, try `useDeferredValue` instead.
+- The function you pass to `startTransition` must be **synchronous**. React immediately executes this function, marking all state updates that happen while it executes as transitions. If you try to perform more state updates later (for example, in a timeout), they won’t be marked as transitions.
+
+### Examples
+
+```jsx
+import { useState, useTransition } from "react";
+
+export default function Home() {
+  const [isPending, startTransition] = useTransition();
+  const [input, setInput] = useState("");
+  const [list, setList] = useState([]);
+
+  const LIST_SIZE = 20000;
+
+  function handleChangeInput(e) {
+    setInput(e.target.value);
+    startTransition(() => {
+      let arr = [];
+      for (let i = 0; i < LIST_SIZE; i++) {
+        arr.push(e.target.value);
+      }
+      setList(arr);
+    });
+  }
+
+  return (
+    <div className="m-2">
+      <input
+        type="text"
+        value={input}
+        onChange={handleChangeInput}
+        className="border border-black rounded-md p-2"
+      />
+      {isPending ? (
+        <div>Loading ...</div>
+      ) : (
+        <div>
+          {list.map((item, index) => {
+            return <div key={index}>{item}</div>;
+          })}
+        </div>
+      )}
+    </div>
+  );
+}
+```

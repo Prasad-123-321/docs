@@ -1,0 +1,33 @@
+---
+title: "Virtaul DOM"
+description: "What is Virtual DOM (VDOM) in react? How it works behind the scenes?"
+icon: "code"
+---
+
+# What is Virtual DOM ?
+
+The **Virtual DOM (VDOM)** is an `in-memory representation of Real DOM`. The representation of a UI is kept in memory and synced with the "real" DOM.
+
+# How Virtaul DOM works ?
+
+Here's a detailed explanation of how the Virtual DOM works:
+
+- `Real DOM vs. Virtual DOM`:
+
+  - `Real DOM`: The real DOM represents the actual structure of a web page. It's a tree-like structure that consists of HTML elements and their properties. When any part of a web page changes, the real DOM is updated accordingly. However, manipulating the real DOM can be slow and inefficient, especially when dealing with complex user interfaces and frequent updates.
+
+  - `Virtual DOM`: The Virtual DOM is an abstraction of the real DOM. It's a lightweight, in-memory representation of the actual DOM structure. React creates and maintains a Virtual DOM tree that mirrors the real DOM structure, but it doesn't directly interact with the browser's DOM API. Instead, it operates on the Virtual DOM, which is faster and more efficient.
+
+- `Reconciliation`: When a change occurs in a React component (e.g., user interaction or data update), React first updates the Virtual DOM to reflect the new state of the component. This update involves creating a new Virtual DOM tree.
+
+- `Diffing Algorithm`: React then compares the new Virtual DOM tree with the previous one to identify the differences between them. This process is known as "diffing" or "reconciliation."
+
+- `Finding the Differences`: React's diffing algorithm is designed to be efficient. It recursively traverses the Virtual DOM tree and identifies the differences in terms of added, updated, or removed elements.
+
+- `Minimal Updates`: Once the differences are identified, React calculates the most efficient way to update the real DOM. Instead of making individual updates for each difference, it batches the updates and makes minimal changes to the real DOM. This is an important optimization that reduces the performance overhead of manipulating the actual DOM.
+
+- `Updating the Real DOM`: After calculating the minimal set of changes required, React updates the real DOM to match the new Virtual DOM. This process is called "reconciliation" and results in the user interface reflecting the new state.
+
+- `Improved Performance`: By working with the Virtual DOM and updating the real DOM as efficiently as possible, React minimizes the performance bottlenecks associated with direct DOM manipulation. This approach reduces the time it takes to update the UI, resulting in a smoother user experience.
+
+- `Batch Updates`: React can also batch multiple updates together, further improving performance. Instead of immediately applying each change to the Virtual DOM and real DOM, React schedules updates and combines them into a single batch, minimizing the number of actual DOM manipulations.
