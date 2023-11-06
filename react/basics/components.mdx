@@ -1,0 +1,67 @@
+---
+title: "What is Class and Functional Components in React?"
+description: "What is the difference between Class and Functional Components in react?"
+icon: "code"
+---
+
+In React, components are the building blocks of a user interface. They can be categorized into two main types: class components and functional components. Both types are used to create UI elements, but they differ in their syntax and capabilities. Here's a detailed explanation of class components, functional components, and the differences between them:
+
+## Class Components
+
+Class components are the traditional way of creating components in React. They are defined as **ES6 classes** that extend the `React.Component` class. Class components have the following characteristics:
+
+`Syntax`: A class component is defined using the class keyword and extends the `React.Component` class. It includes a`render` method that returns the component's JSX (JavaScript XML) markup.
+
+```jsx
+import React, { Component } from "react";
+
+class MyComponent extends Component {
+  render() {
+    return <div>Hello from class component</div>;
+  }
+}
+```
+
+- `State Management`: Class components can have state using the `this.state` and `this.setState` methods. State allows components to manage and react to changes in data and user interactions.
+
+- `Lifecycle Methods`: Class components have lifecycle methods, such as `componentDidMount`, `componentDidUpdate`, and `componentWillUnmount`, which provide opportunities to perform tasks at specific points in a component's lifecycle.
+
+- `Ref Support`: Class components can create and interact with DOM elements using the ref attribute.
+
+- `Local State`: Class components can have local state, and state updates trigger re-rendering of the component.
+
+## Functional Components
+
+Functional components, introduced in React 16.8, are defined as JavaScript functions that return JSX. They are also known as stateless components or functional stateless components. Functional components have the following characteristics:
+
+`Syntax`: A functional component is defined as a JavaScript function that takes props as an argument and returns JSX.
+
+```jsx
+import React from "react";
+
+function MyComponent(props) {
+  return <div>Hello from functional component</div>;
+}
+```
+
+- `State Management`: Functional components didn't originally have state management capabilities, but with the introduction of **React Hooks**, functional components can now manage state using the `useState` hook.
+
+- `Lifecycle Equivalent`: Functional components can replicate the behavior of class component lifecycle methods using React Hooks, such as `useEffect` for side effects and `useLayoutEffect` for synchronous side effects.
+
+- `Simplified Syntax`: Functional components have a more concise syntax, which can make the code easier to read and understand.
+
+- `Performance`: Functional components are generally considered to be more performant than class components because they have a smaller overhead and fewer lifecycle methods.
+
+## Differences between Class and Functional Components:
+
+- `Syntax`: Class components use the `class` syntax, while functional components use plain `JavaScript functions`. Functional components have a more concise and clean syntax.
+
+- `State Handling`: Class components can have both local state and lifecycle methods, while functional components can handle state using React Hooks (e.g., useState, useEffect) introduced in React 16.8.
+
+- `Lifecycle`: Class components have traditional lifecycle methods, while functional components use useEffect and other hooks to replicate similar functionality.
+
+- `Performance`: Functional components are generally considered more performant due to their simpler nature and fewer overhead.
+
+- `Use Cases`: Class components may still be necessary for certain use cases, especially when working with older codebases or libraries that rely on class components. However, functional components are now the preferred choice for writing new React components due to their simplicity and performance benefits.
+
+In summary, class components and functional components are two types of components in React with different syntax and capabilities. Functional components are favored for new development, thanks to React Hooks, which provide state management and lifecycle functionality. They are simpler and more performant, while class components are still used in older codebases and for specific use cases where they are required.

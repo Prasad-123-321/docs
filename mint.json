@@ -34,7 +34,13 @@
   "navigation": [
     {
       "group": "Basics",
-      "pages": ["react/basics/why-react", "react/basics/virtual-dom"]
+      "pages": [
+        "react/basics/why-react",
+        "react/basics/virtual-dom",
+        "react/basics/spa",
+        "react/basics/components",
+        "react/basics/jsx"
+      ]
     },
     {
       "group": "Built-in Hooks",
